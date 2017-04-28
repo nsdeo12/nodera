@@ -1,0 +1,73 @@
+geth --verbosity "0" //to hide logs 
+geth --datadir nodeA console	//to enter into geth console
+geth --verbosity 5 console 2>> /home/vurumadl/Desktop/multiN/logfile	//to store log in logfile mentioned in the address
+
+web3.eth.accounts	
+eth.getBalance(eth.coinbase)
+eth.getBalance("0x7fb6689e7b906041fcb599502dba88026f790fc4")	//pass the account to see the balance
+
+
+
+geth --datadir nodeA/ account new "UserA"			//create a new account for nodeA
+geth --datadir nodeB/ account new "UserB"			/create a new account for nodeB
+
+
+geth --datadir nodeA/ init genesis.json				//initialize the genesis file
+geth --datadir nodeB/ init genesis.json
+
+
+
+
+
+//the resultant accounts(password in bracket for reference)
+nodeA >>UserA(user1)>>0x7fb6689e7b906041fcb599502dba88026f790fc4
+nodeB >>UserB(user2)>>0xa1a8f34d6d13e9001852a97728e60ce6f2a7af4f
+
+
+
+
+
+geth --identity "PrivateNodeA" --rpc --rpcport "7890" --rpccorsdomain "*" --datadir "nodeA/" --port "10005" --nodiscover --ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" --rpcapi "db,eth,net,web3" --autodag --networkid 3141592 --maxpeers 3 --nat "any" --etherbase "0x7fb6689e7b906041fcb599502dba88026f790fc4" --unlock 0 console
+geth --identity "PrivateNodeB" --rpc --rpcport "7892" --rpccorsdomain "*" --datadir "nodeB/" --port "10007" --nodiscover --ipcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" --rpcapi "db,eth,net,web3" --autodag --networkid 3141592 --maxpeers 3 --nat "any" --etherbase "0xa1a8f34d6d13e9001852a97728e60ce6f2a7af4f" --unlock 1 console
+
+enodeA
+admin.nodeInfo.enode
+"enode://3937a24d3fd431c23440a363e048bd25107bc5f11f5405434a42241e8fc0bc14c151c28d7eeb669829450af05abc2b5c460980711b0cbed57785715d6fb69cef@[::]:30303"
+
+
+enodeB
+admin.nodeInfo.enode
+"enode://311850e76f5f6c181431925263a3b3c9c45fd268edbfe09d83ba55e0ae23719f1b99fec1129c5004fb59ccce184b6b82b49ecb6057bf590408801735958b2cfe@[::]:30303"
+
+
+
+add peer(enodeB) to nodeA
+admin.addPeer("enode://311850e76f5f6c181431925263a3b3c9c45fd268edbfe09d83ba55e0ae23719f1b99fec1129c5004fb59ccce184b6b82b49ecb6057bf590408801735958b2cfe@[::]:30303")
+
+add peer(enodeA) to nodeB
+admin.addPeer("enode://3937a24d3fd431c23440a363e048bd25107bc5f11f5405434a42241e8fc0bc14c151c28d7eeb669829450af05abc2b5c460980711b0cbed57785715d6fb69cef@[::]:10005?discport=0")
+
+
+
+
+
+send transaction from one account to another
+eth.sendTransaction({from: '0x7fb6689e7b906041fcb599502dba88026f790fc4', to: '0xa1a8f34d6d13e9001852a97728e60ce6f2a7af4f', value: web3.toWei(.0000033, "ether")})
+
+check balance of account
+web3.fromWei(eth.getBalance(eth.accounts[1]).toNumber(), "ether")
+
+to check balance
+web3.fromWei(eth.getBalance(eth.coinbase), "ether")
+
+eth.sendTransaction({ 
+
+                from: eth.accounts[0], 
+
+                to: eth.accounts[1], 
+
+                value: web3.toWei(1, "ether")}) 
+				
+miner.start(7);
+
+
