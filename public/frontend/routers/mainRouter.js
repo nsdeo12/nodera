@@ -17,6 +17,10 @@ app.config(function($routeProvider) {
     templateUrl : './frontend/partials/about.html',
     controller  : 'AboutController'
   })
+  .when('/dash', {
+    templateUrl : './frontend/partials/dashboard.html',
+    controller  : 'DashboardController'
+  })
 
   .otherwise({redirectTo: '/'});
 });
